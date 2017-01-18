@@ -1,5 +1,5 @@
 """
-Resized image generator
+Image resizer
 """
 
 import os
@@ -9,9 +9,10 @@ import cv2
 
 from util.file_accessor import get_filelist
 
-def generate(input_path, output_path, height, width):
+def resize(input_path, output_path, height, width):
     filelist = get_filelist(input_path)
-    os.makedirs(output_path) if not os.path.exists(output_path)
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
     for file in filelist:
         img = cv2.imread(file)
         try:
@@ -22,14 +23,13 @@ def generate(input_path, output_path, height, width):
         except:
             continue
 
-
 if __name__ == '__main__':
     # 引数指定
     parser = argparse.ArgumentParser()
     parser.add_argument('--input','--input-path' , '-i', type=str)
     parser.add_argument('--output', '--output-path', '-o', type=str)
-    parser.add_argument('--height', '-h', type=str)
-    parser.add_argument('--width', '-w', type=str)
+    parser.add_argument('--height', type=int)
+    parser.add_argument('--width', type=int)
     args = parser.parse_args()
 
-    generate(args)
+    resize(args.input, args.output, args.height, args.width)
